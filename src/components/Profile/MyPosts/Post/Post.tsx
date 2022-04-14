@@ -1,12 +1,8 @@
 import React from 'react';
 import s from './Post.module.css';
+import {PostsType} from '../../../../redux/state';
 
-type messagePropsType = {
-    message: string
-    liked: number
-}
-
-const Post: React.FC<messagePropsType> = ({message, liked}) => {
+export const Post: React.FC<PostsType> = ({message, likesCount}) => {
     return (
         <div className={s.item}>
             <img
@@ -14,10 +10,8 @@ const Post: React.FC<messagePropsType> = ({message, liked}) => {
                 alt="avatar"/>
             {message}
             <div>
-                <span>{liked} likes</span>
+                <span>{likesCount} likes</span>
             </div>
         </div>
     )
 }
-
-export default Post;

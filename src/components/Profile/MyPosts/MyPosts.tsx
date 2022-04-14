@@ -1,8 +1,19 @@
 import React from 'react';
 import s from './MyPosts.module.css';
-import Post from './Post/Post'
+import {Post} from './Post/Post'
+import {PostsType} from '../../../redux/state';
 
-const MyPosts = () => {
+type MyPostsType = {
+    posts: Array<PostsType>
+}
+
+export const MyPosts:React.FC<MyPostsType> = ({posts}) => {
+
+    const postsElements = posts.map(p => <Post
+        message={p.message}
+        likesCount={p.likesCount}
+        key={p.id}/>);
+
     return (
         <div className={s.postsBlock}>
             <h3>My posts</h3>
@@ -16,15 +27,8 @@ const MyPosts = () => {
             </div>
             <div className={s.posts}>
                 Posts go here
-                <Post
-                    message={'Sup, bro'}
-                    liked={15}/>
-                <Post
-                    message={'How\'re you doing?'}
-                    liked={20}/>
+                {postsElements}
             </div>
         </div>
     )
 }
-
-export default MyPosts;
