@@ -5,16 +5,14 @@ import {Navbar} from './components/Navbar/Navbar';
 import {Profile} from './components/Profile/Profile';
 import {Dialogs} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
-import {News} from './components/News/News';
-import {Music} from './components/Music/Music';
-import {Settings} from './components/Settings/Settings';
 import {RootStateType} from './redux/state';
 
 type AppPropsType = {
     state: RootStateType
+    addPostCallback: (postMessage: string) => void
 }
 
-function App({state}: AppPropsType) {
+function App({state, addPostCallback}: AppPropsType) {
     return (
         <BrowserRouter>
             <div className="app-wrapper">
@@ -24,10 +22,7 @@ function App({state}: AppPropsType) {
                     <Route path="/dialogs" render={() => <Dialogs
                         state={state.dialogsPage}/>}/>
                     <Route path="/profile" render={() => <Profile
-                        state={state.profilePage}/>}/>
-                    <Route path="/news" render={() => <News/>}/>
-                    <Route path="/music" render={() => <Music/>}/>
-                    <Route path="/settings" render={() => <Settings/>}/>
+                        state={state.profilePage} addPostCallback={addPostCallback}/>}/>
                 </div>
             </div>
         </BrowserRouter>

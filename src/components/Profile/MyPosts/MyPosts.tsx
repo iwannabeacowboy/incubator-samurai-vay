@@ -1,28 +1,38 @@
 import React from 'react';
 import s from './MyPosts.module.css';
 import {Post} from './Post/Post'
-import {PostsType} from '../../../redux/state';
+import {PostType} from '../../../redux/state';
 
 type MyPostsType = {
-    posts: Array<PostsType>
+    posts: Array<PostType>
+    addPostCallback: (postMessage: string) => void
 }
 
-export const MyPosts:React.FC<MyPostsType> = ({posts}) => {
+export const MyPosts: React.FC<MyPostsType> = ({posts, addPostCallback: addPostCallback}) => {
 
     const postsElements = posts.map(p => <Post
         message={p.message}
         likesCount={p.likesCount}
         key={p.id}/>);
 
+    const newPostElement = React.createRef<HTMLTextAreaElement>();
+
+    const addPost = () => {
+        if (newPostElement.current) {
+            addPostCallback(newPostElement.current.value)
+            newPostElement.current.value = ''
+        }
+    };
+
     return (
         <div className={s.postsBlock}>
             <h3>My posts</h3>
             <div>
                 <div>
-                    <textarea/>
+                    <textarea ref={newPostElement}/>
                 </div>
                 <div>
-                    <button>Add post</button>
+                    <button onClick={addPost}>Add post</button>
                 </div>
             </div>
             <div className={s.posts}>

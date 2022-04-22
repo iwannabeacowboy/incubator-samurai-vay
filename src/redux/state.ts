@@ -1,23 +1,31 @@
+import {v1} from 'uuid';
+import {renderEntireTree} from '../render';
+
 export type MessagesType = {
     id?: string,
     message: string
 }
+
 export type DialogsType = {
     id: string,
     name: string
 }
-export type PostsType = {
+
+export type PostType = {
     id?: string,
     message: string
     likesCount: number
 }
+
 export type ProfilePageType = {
-    posts: Array<PostsType>
+    posts: Array<PostType>
 }
+
 export type DialogsPageType = {
     messages: Array<MessagesType>
     dialogs: Array<DialogsType>
 }
+
 export type SidebarType = {}
 
 export type RootStateType = {
@@ -25,6 +33,7 @@ export type RootStateType = {
     dialogsPage: DialogsPageType
     sidebar: SidebarType
 }
+
 const state: RootStateType = {
     profilePage: {
         posts: [
@@ -48,6 +57,16 @@ const state: RootStateType = {
         ],
     },
     sidebar: {}
+}
+
+export const addPostCallback = (postMessage: string) => {
+    const newPost = {
+        id: v1(),
+        message: postMessage,
+        likesCount: 0
+    }
+    state.profilePage.posts.unshift(newPost)
+    renderEntireTree(state)
 }
 
 export default state;

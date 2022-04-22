@@ -12,11 +12,19 @@ export const Dialogs: React.FC<DialogsType> = ({state}) => {
     const dialogsElements = state.dialogs.map(d => <DialogItem
         name={d.name}
         id={d.id}
-        key={d.id}/>)
+        key={d.id}
+    />)
 
     const messagesElements = state.messages.map(m => <Message
         message={m.message}
-        key={m.id}/>)
+        key={m.id}
+    />)
+
+    const newMessageElement = React.createRef<HTMLTextAreaElement>();
+
+    const addMessage = () => {
+        alert(newMessageElement.current?.value)
+    }
 
     return (
         <div className={s.dialogs}>
@@ -25,6 +33,10 @@ export const Dialogs: React.FC<DialogsType> = ({state}) => {
             </div>
             <div className={s.messages}>
                 {messagesElements}
+            </div>
+            <div>
+                <textarea ref={newMessageElement}/>
+                <button onClick={addMessage}>Send message</button>
             </div>
         </div>
     );
