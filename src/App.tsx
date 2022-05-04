@@ -9,10 +9,11 @@ import {RootStateType} from './redux/state';
 
 type AppPropsType = {
     state: RootStateType
-    addPostCallback: (postMessage: string) => void
+    addPostCallback: () => void
+    updateNewPostText: (newText: string) => void
 }
 
-function App({state, addPostCallback}: AppPropsType) {
+function App({state, addPostCallback, updateNewPostText}: AppPropsType) {
     return (
         <BrowserRouter>
             <div className="app-wrapper">
@@ -22,7 +23,10 @@ function App({state, addPostCallback}: AppPropsType) {
                     <Route path="/dialogs" render={() => <Dialogs
                         state={state.dialogsPage}/>}/>
                     <Route path="/profile" render={() => <Profile
-                        state={state.profilePage} addPostCallback={addPostCallback}/>}/>
+                        state={state.profilePage}
+                        addPostCallback={addPostCallback}
+                        updateNewPostText={updateNewPostText}
+                    />}/>
                 </div>
             </div>
         </BrowserRouter>
