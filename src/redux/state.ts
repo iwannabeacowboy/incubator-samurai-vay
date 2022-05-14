@@ -1,4 +1,5 @@
-import {v1} from 'uuid';
+import {profileReducer, ProfileReducerType} from './profileReducer';
+import {dialogsReducer, dialogsReducerType} from './dialogsReducer';
 
 export type MessagesType = {
     id?: string,
@@ -24,9 +25,10 @@ export type ProfilePageType = {
 export type DialogsPageType = {
     messages: Array<MessagesType>
     dialogs: Array<DialogsType>
+    newMessageBody: string
 }
 
-export type SidebarType = {}
+type SidebarType = {}
 
 export type RootStateType = {
     profilePage: ProfilePageType
@@ -34,53 +36,59 @@ export type RootStateType = {
     sidebar: SidebarType
 }
 
-const state: RootStateType = {
-    profilePage: {
-        posts: [
-            {id: '1', message: 'Sup, bro', likesCount: 12},
-            {id: '2', message: 'How\'re you doing?', likesCount: 11}
-        ],
-        newPostText: ''
-    },
-    dialogsPage: {
-        dialogs: [
-            {id: '1', name: 'Dima'},
-            {id: '2', name: 'Andrey'},
-            {id: '3', name: 'Sveta'},
-            {id: '4', name: 'Sasha'},
-            {id: '5', name: 'Valera'},
-            {id: '6', name: 'Vlad'}
-        ],
-        messages: [
-            {id: '1', message: 'Hi'},
-            {id: '2', message: 'How are you?'},
-            {id: '3', message: 'Yo'},
-        ],
-    },
-    sidebar: {}
+type StoreType = {
+    _state: RootStateType
+    _callSubscriber: () => void
+    getState: () => RootStateType
+    subscribe: (observer: () => void) => void
+    dispatch: (action: ActionsType) => void
 }
 
-export const addPostCallback = () => {
-    const newPost = {
-        id: v1(),
-        message: state.profilePage.newPostText,
-        likesCount: 0
+const store: StoreType = {
+    _state: {
+        profilePage: {
+            posts: [
+                {id: '1', message: 'Sup, bro', likesCount: 12},
+                {id: '2', message: 'How\'re you doing?', likesCount: 11}
+            ],
+            newPostText: ''
+        },
+        dialogsPage: {
+            dialogs: [
+                {id: '1', name: 'Dima'},
+                {id: '2', name: 'Andrey'},
+                {id: '3', name: 'Sveta'},
+                {id: '4', name: 'Sasha'},
+                {id: '5', name: 'Valera'},
+                {id: '6', name: 'Vlad'}
+            ],
+            messages: [
+                {id: '1', message: 'Hi'},
+                {id: '2', message: 'How are you?'},
+                {id: '3', message: 'Yo'},
+            ],
+            newMessageBody: ''
+        },
+        sidebar: {}
+    },
+    _callSubscriber() {
+        console.log('State changed')
+    },
+    getState() {
+        return this._state
+    },
+    subscribe(observer: () => void) {
+        this._callSubscriber = observer
+    },
+
+    dispatch(action) {
+        profileReducer(this._state.profilePage, action)
+        dialogsReducer(this._state.dialogsPage, action)
+        this._callSubscriber()
     }
-    state.profilePage.posts.unshift(newPost)
-    state.profilePage.newPostText = ''
-    renderEntireTree()
-}
-export const updateNewPostText = (newText: string) => {
-    state.profilePage.newPostText = newText
-    renderEntireTree()
 }
 
-let renderEntireTree = () => {
-}
+export type ActionsType = ProfileReducerType | dialogsReducerType
 
-export const subscriber = (observer: () => void) => {
-    renderEntireTree = observer
-}
-
-export default state;
+export default store;
 

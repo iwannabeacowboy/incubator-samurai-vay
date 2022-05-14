@@ -5,15 +5,14 @@ import {Navbar} from './components/Navbar/Navbar';
 import {Profile} from './components/Profile/Profile';
 import {Dialogs} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
-import {RootStateType} from './redux/state';
+import {ActionsType, RootStateType} from './redux/state';
 
 type AppPropsType = {
     state: RootStateType
-    addPostCallback: () => void
-    updateNewPostText: (newText: string) => void
+    dispatch: (action: ActionsType) => void
 }
 
-function App({state, addPostCallback, updateNewPostText}: AppPropsType) {
+function App({state, dispatch}: AppPropsType) {
     return (
         <BrowserRouter>
             <div className="app-wrapper">
@@ -21,12 +20,15 @@ function App({state, addPostCallback, updateNewPostText}: AppPropsType) {
                 <Navbar/>
                 <div className="app-wrapper-content">
                     <Route path="/dialogs" render={() => <Dialogs
-                        state={state.dialogsPage}/>}/>
+                        state={state.dialogsPage}
+                        dispatch={dispatch}
+                    />}
+                    />
                     <Route path="/profile" render={() => <Profile
                         state={state.profilePage}
-                        addPostCallback={addPostCallback}
-                        updateNewPostText={updateNewPostText}
-                    />}/>
+                        dispatch={dispatch}
+                    />}
+                    />
                 </div>
             </div>
         </BrowserRouter>
