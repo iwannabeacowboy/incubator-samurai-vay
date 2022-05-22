@@ -2,35 +2,43 @@ import React, {ChangeEvent} from 'react';
 import s from './Dialog.module.css';
 import {DialogItem} from './DialogItem/DialogItem';
 import {Message} from './Message/Message';
-import {ActionsType, DialogsPageType} from '../../redux/state';
-import {sendMessageAC, updateNewMessageBodyAC} from '../../redux/dialogsReducer';
+import {DialogType, MessageType} from '../../redux/dialogsReducer';
 
 type DialogsType = {
-    state: DialogsPageType
-    dispatch: (action: ActionsType) => void
+    dialogs: DialogType[]
+    messages: MessageType[]
+    newMessageBody: string
+    sendMessage: () => void
+    updateNewMessageBody: (body: string) => void
 }
 
-export const Dialogs: React.FC<DialogsType> = ({state, dispatch}) => {
+export const Dialogs: React.FC<DialogsType> = ({
+                                                   dialogs,
+                                                   messages,
+                                                   newMessageBody,
+                                                   sendMessage,
+                                                   updateNewMessageBody
+                                               }) => {
 
-    const dialogsElements = state.dialogs.map(d => <DialogItem
+    const dialogsElements = dialogs.map(d => <DialogItem
         name={d.name}
         id={d.id}
         key={d.id}
     />)
 
-    const messagesElements = state.messages.map(m => <Message
+    const messagesElements = messages.map(m => <Message
         message={m.message}
         key={m.id}
     />)
 
     const onSendMessageClick = () => {
-        if (state.newMessageBody.trim()) {
-            dispatch(sendMessageAC())
+        if (newMessageBody.trim()) {
+            sendMessage()
         }
     }
 
     const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        dispatch(updateNewMessageBodyAC(e.currentTarget.value))
+        updateNewMessageBody(e.currentTarget.value)
     }
 
     return (
@@ -44,7 +52,7 @@ export const Dialogs: React.FC<DialogsType> = ({state, dispatch}) => {
                     <div>
                         <textarea
                             placeholder={'Enter your message'}
-                            value={state.newMessageBody}
+                            value={newMessageBody}
                             onChange={onChangeHandler}
                         />
                     </div>

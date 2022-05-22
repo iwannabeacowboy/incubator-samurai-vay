@@ -1,16 +1,16 @@
 import React, {ChangeEvent} from 'react';
 import s from './MyPosts.module.css';
 import {Post} from './Post/Post'
-import {ActionsType, PostType} from '../../../redux/state';
-import {addPostAC, updateNewPostTextAC} from '../../../redux/profileReducer';
+import {PostType} from '../../../redux/profileReducer';
 
 type MyPostsType = {
     posts: Array<PostType>
     newPostText: string
-    dispatch: (action: ActionsType) => void
+    updateNewPostText: (text: string) => void
+    addPost: () => void
 }
 
-export const MyPosts: React.FC<MyPostsType> = ({posts, newPostText, dispatch}) => {
+export const MyPosts: React.FC<MyPostsType> = ({posts, newPostText, updateNewPostText, addPost}) => {
 
     const postsElements = posts.map(p => <Post
         message={p.message}
@@ -19,12 +19,12 @@ export const MyPosts: React.FC<MyPostsType> = ({posts, newPostText, dispatch}) =
 
     const onAddPostClick = () => {
         if (newPostText.trim()) {
-            dispatch(addPostAC())
+            addPost()
         }
     };
 
-    const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        dispatch(updateNewPostTextAC(e.currentTarget.value))
+    const onPostChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        updateNewPostText(e.currentTarget.value)
     }
 
     return (
@@ -34,7 +34,7 @@ export const MyPosts: React.FC<MyPostsType> = ({posts, newPostText, dispatch}) =
                 <div>
                     <textarea
                         value={newPostText}
-                        onChange={onChangeHandler}
+                        onChange={onPostChange}
                     />
                 </div>
                 <div>

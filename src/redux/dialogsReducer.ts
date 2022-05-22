@@ -1,8 +1,40 @@
-import {ActionsType, DialogsPageType} from './state';
 import {v1} from 'uuid';
 
-export type dialogsReducerType = updateNewMessageBodyAType | SendMessageAType
-export const dialogsReducer = (state: DialogsPageType, action: ActionsType) => {
+export type MessageType = {
+    id?: string,
+    message: string
+}
+
+export type DialogType = {
+    id: string,
+    name: string
+}
+
+export type DialogsPageType = {
+    messages: Array<MessageType>
+    dialogs: Array<DialogType>
+    newMessageBody: string
+}
+
+const initialState: DialogsPageType = {
+    dialogs: [
+        {id: '1', name: 'Dima'},
+        {id: '2', name: 'Andrey'},
+        {id: '3', name: 'Sveta'},
+        {id: '4', name: 'Sasha'},
+        {id: '5', name: 'Valera'},
+        {id: '6', name: 'Vlad'}
+    ],
+    messages: [
+        {id: '1', message: 'Hi'},
+        {id: '2', message: 'How are you?'},
+        {id: '3', message: 'Yo'},
+    ],
+    newMessageBody: ''
+}
+
+export type dialogsActionType = updateNewMessageBodyAType | SendMessageAType
+export const dialogsReducer = (state = initialState, action: dialogsActionType) => {
     switch (action.type) {
         case 'UPDATE-NEW-MESSAGE-BODY':
             state.newMessageBody = action.newBody
