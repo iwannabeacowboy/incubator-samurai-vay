@@ -1,24 +1,19 @@
 import React, {ChangeEvent} from 'react';
 import s from './MyPosts.module.css';
 import {Post} from './Post/Post'
-import {PostType} from '../../../redux/profileReducer';
+import {MyPostsPropsType} from './MyPostsContainer';
 
-type MyPostsType = {
-    posts: Array<PostType>
-    newPostText: string
-    updateNewPostText: (text: string) => void
-    addPost: () => void
-}
+export const MyPosts: React.FC<MyPostsPropsType> = ({profilePage, addPost, updateNewPostText}) => {
 
-export const MyPosts: React.FC<MyPostsType> = ({posts, newPostText, updateNewPostText, addPost}) => {
-
-    const postsElements = posts.map(p => <Post
+    const postsElements = profilePage.posts.map(p => <Post
+        id={p.id}
+        key={p.id}
         message={p.message}
         likesCount={p.likesCount}
-        key={p.id}/>);
+    />);
 
     const onAddPostClick = () => {
-        if (newPostText.trim()) {
+        if (profilePage.newPostText.trim()) {
             addPost()
         }
     };
@@ -33,7 +28,7 @@ export const MyPosts: React.FC<MyPostsType> = ({posts, newPostText, updateNewPos
             <div>
                 <div>
                     <textarea
-                        value={newPostText}
+                        value={profilePage.newPostText}
                         onChange={onPostChange}
                     />
                 </div>

@@ -1,32 +1,36 @@
 import React from 'react';
-import {sendMessageAC, updateNewMessageBodyAC} from '../../redux/dialogsReducer';
+import {DialogsPageType, sendMessageAC, updateNewMessageBodyAC} from '../../redux/dialogsReducer';
 import {Dialogs} from './Dialogs';
-import StoreContext from '../../StoreContext';
+import {connect} from 'react-redux';
+import {AppStateType} from '../../redux/store';
+import {Dispatch} from 'redux';
 
-export const DialogsContainer = () => {
+type mapStateToPropsType = {
+    dialogsPage: DialogsPageType
+}
 
-    return (
-        <StoreContext.Consumer>
-            {(store) => {
+type mapDispatchToProps = {
+    sendMessage: () => void
+    updateNewMessageBody: (body: string) => void
+}
 
-                const state = store.getState()
-                const sendMessage = () => {
-                    store.dispatch(sendMessageAC())
-                }
-                const updateNewMessageBody = (body: string) => {
-                    store.dispatch(updateNewMessageBodyAC(body))
-                }
+export type DialogsPropsType = mapStateToPropsType & mapDispatchToProps
 
-                return (
-                    <Dialogs
-                        dialogs={state.dialogsPage.dialogs}
-                        messages={state.dialogsPage.messages}
-                        newMessageBody={state.dialogsPage.newMessageBody}
-                        sendMessage={sendMessage}
-                        updateNewMessageBody={updateNewMessageBody}
-                    />
-                )
-            }}
-        </StoreContext.Consumer>
-    );
-};
+const mapStateToProps = (state: AppStateType): mapStateToPropsType => {
+    return {
+        dialogsPage: state.dialogsPage,
+    }
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): mapDispatchToProps => {
+    return {
+        sendMessage: () => {
+            dispatch(sendMessageAC())
+        },
+        updateNewMessageBody: (body) => {
+            dispatch(updateNewMessageBodyAC(body))
+        },
+    }
+}
+
+export const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs)

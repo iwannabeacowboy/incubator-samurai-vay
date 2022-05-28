@@ -2,37 +2,24 @@ import React, {ChangeEvent} from 'react';
 import s from './Dialog.module.css';
 import {DialogItem} from './DialogItem/DialogItem';
 import {Message} from './Message/Message';
-import {DialogType, MessageType} from '../../redux/dialogsReducer';
+import {DialogsPropsType} from './DialogsContainer';
 
-type DialogsType = {
-    dialogs: DialogType[]
-    messages: MessageType[]
-    newMessageBody: string
-    sendMessage: () => void
-    updateNewMessageBody: (body: string) => void
-}
+export const Dialogs: React.FC<DialogsPropsType> = ({dialogsPage, sendMessage, updateNewMessageBody}) => {
 
-export const Dialogs: React.FC<DialogsType> = ({
-                                                   dialogs,
-                                                   messages,
-                                                   newMessageBody,
-                                                   sendMessage,
-                                                   updateNewMessageBody
-                                               }) => {
-
-    const dialogsElements = dialogs.map(d => <DialogItem
-        name={d.name}
+    const dialogsElements = dialogsPage.dialogs.map(d => <DialogItem
         id={d.id}
         key={d.id}
+        name={d.name}
     />)
 
-    const messagesElements = messages.map(m => <Message
-        message={m.message}
+    const messagesElements = dialogsPage.messages.map(m => <Message
+        id={m.id}
         key={m.id}
+        message={m.message}
     />)
 
     const onSendMessageClick = () => {
-        if (newMessageBody.trim()) {
+        if (dialogsPage.newMessageBody.trim()) {
             sendMessage()
         }
     }
@@ -52,7 +39,7 @@ export const Dialogs: React.FC<DialogsType> = ({
                     <div>
                         <textarea
                             placeholder={'Enter your message'}
-                            value={newMessageBody}
+                            value={dialogsPage.newMessageBody}
                             onChange={onChangeHandler}
                         />
                     </div>
