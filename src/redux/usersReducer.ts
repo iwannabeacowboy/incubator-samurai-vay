@@ -1,34 +1,17 @@
 export type UserType = {
-    id: string
-    fullName: string
+    name: string
+    id: number
+    uniqueUrlName: string
+    photos: {
+        small: string ,
+        large: string
+    }
     status: string
     followed: boolean
-    photoUrl: string
-    location: {
-        city: string
-        country: string
-    }
 }
 
 const initialState = {
-    users: [
-        {
-            id: '1', fullName: 'Ivan', status: 'hello world', followed: false,
-            photoUrl: 'AVA',
-            location: {
-                city: 'Moscow',
-                country: 'Russia'
-            }
-        },
-        {
-            id: '2', fullName: 'Petro', status: 'goodbye', followed: true,
-            photoUrl: 'AVA',
-            location: {
-                city: 'Perm',
-                country: 'Russia'
-            },
-        }
-    ] as UserType[]
+    users: [] as UserType[]
 }
 
 export type UsersPageType = typeof initialState
@@ -49,7 +32,7 @@ export const usersReducer = (state: UsersPageType = initialState, action: UsersA
 }
 
 type toggleFollowAType = ReturnType<typeof toggleFollowAC>
-export const toggleFollowAC = (userID: string) => {
+export const toggleFollowAC = (userID: number) => {
     return {
         type: 'TOGGLE-FOLLOW',
         payload: {

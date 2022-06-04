@@ -10,7 +10,7 @@ type mapStateToPropsType = {
 }
 
 type mapDispatchToProps = {
-    toggleFollow: (userID: string) => void
+    toggleFollow: (userID: number) => void
     setUsers: (users: UserType[]) => void
 }
 
