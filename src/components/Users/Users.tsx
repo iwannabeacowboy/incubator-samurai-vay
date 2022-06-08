@@ -3,18 +3,23 @@ import {UsersPropsType} from './UsersContainer';
 import axios from 'axios';
 import userPhoto from '../../assets/images/default-user.png'
 
-export const Users: React.FC<UsersPropsType> = ({users, toggleFollow, setUsers}) => {
+export class Users extends React.Component<UsersPropsType> {
 
-    if (users.length === 0) {
-        axios.get('https://social-network.samuraijs.com/api/1.0/users')
-            .then(response => {
-                setUsers(response.data.items)
-            })
+    componentDidMount() {
+        const {users, setUsers} = this.props;
+        if (users.length === 0) {
+            axios.get('https://social-network.samuraijs.com/api/1.0/users')
+                .then(response => {
+                    setUsers(response.data.items)
+                })
+        }
     }
 
-    return (
-        <div>
-            {users.map(u => <div key={u.id}>
+    render() {
+        const {users, toggleFollow} = this.props;
+        return (
+            <div>
+                {users.map(u => <div key={u.id}>
                 <span>
                     <div>
                         <img
@@ -30,15 +35,16 @@ export const Users: React.FC<UsersPropsType> = ({users, toggleFollow, setUsers})
                         </button>
                     </div>
                 </span>
-                <span>
+                    <span>
                     <div>{u.name}</div>
                     <div>{u.status}</div>
                 </span>
-                {/*<span>*/}
-                {/*    <div>{u.location.city}</div>*/}
-                {/*    <div>{u.location.country}</div>*/}
-                {/*</span>*/}
-            </div>)}
-        </div>
-    );
-};
+                    {/*<span>*/}
+                    {/*    <div>{u.location.city}</div>*/}
+                    {/*    <div>{u.location.country}</div>*/}
+                    {/*</span>*/}
+                </div>)}
+            </div>
+        );
+    }
+}

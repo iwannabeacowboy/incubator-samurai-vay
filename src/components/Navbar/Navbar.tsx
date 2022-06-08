@@ -21,7 +21,7 @@ export const Navbar = () => {
                 <NavLink to='/settings' activeClassName={s.active}>Settings</NavLink>
             </div>
             <div className={s.item}>
-                <NavLink to='/users' activeClassName={s.active}>Find users</NavLink>
+                <NavLink to='/users' activeClassName={s.active}>Users</NavLink>
             </div>
         </nav>
     )
