@@ -16,7 +16,7 @@ const initialState = {
 
 export type ProfilePageType = typeof initialState
 
-type ProfileActionType = UpdateNewPostTextAType | AddPostAType
+export type ProfileActionType = UpdateNewPostTextAType | AddPostAType
 export const profileReducer = (state: ProfilePageType = initialState, action: ProfileActionType): ProfilePageType => {
     switch (action.type) {
         case 'UPDATE-NEW-POST-TEXT':

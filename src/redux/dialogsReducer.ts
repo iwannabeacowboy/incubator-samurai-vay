@@ -29,8 +29,8 @@ export const initialState = {
 
 export type DialogsPageType = typeof initialState
 
-type dialogsActionType = updateNewMessageBodyAType | SendMessageAType
-export const dialogsReducer = (state: DialogsPageType = initialState, action: dialogsActionType): DialogsPageType => {
+export type DialogsActionType = updateNewMessageBodyAType | SendMessageAType
+export const dialogsReducer = (state: DialogsPageType = initialState, action: DialogsActionType): DialogsPageType => {
     switch (action.type) {
         case 'UPDATE-NEW-MESSAGE-BODY':
             return {...state, newMessageBody: action.payload.newBody}
