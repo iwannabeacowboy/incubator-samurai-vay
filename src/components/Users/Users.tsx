@@ -1,66 +1,54 @@
 import React from 'react';
-import {UsersPropsType} from './UsersContainer';
-import axios from 'axios';
-import userPhoto from '../../assets/images/default-user.png'
 import s from './Users.module.css'
+import userPhoto from '../../assets/images/default-user.png';
+import {UserType} from '../../redux/usersReducer';
+import { NavLink } from 'react-router-dom';
 
-export class Users extends React.Component<UsersPropsType> {
+type UsersPropsType = {
+    users: UserType[]
+    totalUsersCount: number
+    pageSize: number
+    currentPage: number
+    toggleFollow: (userID: number) => void
+    onPageChange: (pageNumber: number) => void
+}
 
-    componentDidMount() {
-        const {users, currentPage, pageSize, setUsers, setTotalUsersCount} = this.props;
-        if (users.length === 0) {
-            axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`)
-                .then(response => {
-                    setUsers(response.data.items)
-                    setTotalUsersCount(response.data.totalCount)
-                })
-        }
+export const Users = ({users, totalUsersCount, currentPage, pageSize, onPageChange, toggleFollow}: UsersPropsType) => {
+
+    const pagesCount = Math.ceil(totalUsersCount / pageSize)
+
+    // ПЕРЕПИСАТЬ, ДОБАВИТЬ НОРМАЛЬНЫЙ PAGINATION
+    const pages = []
+    for (let i = currentPage; i <= pagesCount && pages.length < 15; i++) {
+        pages.push(i)
     }
 
-    onPageChange = (pageNumber: number) => {
-        const {pageSize, setCurrentPage, setUsers} = this.props
-        setCurrentPage(pageNumber)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${pageSize}`)
-            .then(response => {
-                setUsers(response.data.items)
-            })
-    }
-
-    render() {
-        const {users, pageSize, totalUsersCount, currentPage, toggleFollow} = this.props;
-
-        const pagesCount = Math.ceil(totalUsersCount / pageSize)
-
-        // ПЕРЕПИСАТЬ, ДОБАВИТЬ НОРМАЛЬНЫЙ PAGINATION
-        const pages = []
-        for (let i = currentPage; i <= pagesCount && pages.length < 15; i++) {
-            pages.push(i)
-        }
-
-        return (
+    return (
+        <div>
             <div>
-                <div>
-                    {pages.map(p => {
-                        return (
-                            <span
-                                key={p}
-                                className={currentPage === p ? s.selectedPage : ''}
-                                onClick={() => this.onPageChange(p)}
-                            >
+                {pages.map(p => {
+                    return (
+                        <span
+                            key={p}
+                            className={currentPage === p ? s.selectedPage : ''}
+                            onClick={() => onPageChange(p)}
+                        >
                                 {`   ${p}   `}
                             </span>
-                        )
-                    })}
-                </div>
+                    )
+                })}
+            </div>
 
-                {users.map(u => <div key={u.id} className={s.listedUser}>
+            {users.map(u => <div key={u.id} className={s.listedUser}>
                     <span>
                         <div>
-                            <img
-                                className={s.avatar}
-                                src={u.photos.small ? u.photos.small : userPhoto}
-                                alt="User avatar"
-                            />
+                            <NavLink to={`/profile/${u.id}`}>
+                                <img
+                                    className={s.avatar}
+                                    src={u.photos.small ? u.photos.small : userPhoto}
+                                    alt="User avatar"
+                                />
+                            </NavLink>
                         </div>
                         <div>
                             <button
@@ -70,16 +58,15 @@ export class Users extends React.Component<UsersPropsType> {
                             </button>
                         </div>
                     </span>
-                    <span>
+                <span>
                         <div>{u.name}</div>
                         <div>{u.status}</div>
                     </span>
-                    {/*<span>*/}
-                    {/*    <div>{u.location.city}</div>*/}
-                    {/*    <div>{u.location.country}</div>*/}
-                    {/*</span>*/}
-                </div>)}
-            </div>
-        );
-    }
-}
+                {/*<span>*/}
+                {/*    <div>{u.location.city}</div>*/}
+                {/*    <div>{u.location.country}</div>*/}
+                {/*</span>*/}
+            </div>)}
+        </div>
+    );
+};
